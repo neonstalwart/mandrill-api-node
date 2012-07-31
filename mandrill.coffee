@@ -6,7 +6,7 @@ OPTS = {
     port:   443,
     prefix: '/api/1.0/',
     method: 'POST',
-    headers: {'Content-Type': 'application/json', 'User-Agent': 'Mandrill-Node/1.0.1'}
+    headers: {'Content-Type': 'application/json', 'User-Agent': 'Mandrill-Node/1.0.2'}
 }
 
 class exports.Mandrill

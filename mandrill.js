@@ -11,7 +11,7 @@
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'User-Agent': 'Mandrill-Node/1.0.1'
+      'User-Agent': 'Mandrill-Node/1.0.2'
     }
   };
 
