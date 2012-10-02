@@ -6,7 +6,7 @@ OPTS = {
     port:   443,
     prefix: '/api/1.0/',
     method: 'POST',
-    headers: {'Content-Type': 'application/json', 'User-Agent': 'Mandrill-Node/1.0.4'}
+    headers: {'Content-Type': 'application/json', 'User-Agent': 'Mandrill-Node/1.0.5'}
 }
 
 class exports.Mandrill
@@ -426,6 +426,7 @@ class Messages
                  - type {String} the MIME type of the attachment - allowed types are text/*, image/*, and application/pdf
                  - name {String} the file name of the attachment
                  - content {String} the content of the attachment as a base64-encoded string
+    @option params {Boolean} async enable a background sending mode that is optimized for bulk sending. In async mode, messages/send will immediately return a status of "queued" for every recipient. To handle rejections when sending in async mode, set up a webhook for the 'reject' event. Defaults to false for messages with fewer than 100 recipients; messages with more than 100 recipients are always sent asynchronously, regardless of the value of async.
     @param {Function} onsuccess an optional callback to execute when the API call is successfully made
     @param {Function} onerror an optional callback to execute when the API call errors out - defaults to throwing the error as an exception
     ###
@@ -435,6 +436,7 @@ class Messages
             onsuccess = params
             params = {}
 
+        params["async"] ?= false
 
         @master.call('messages/send', params, onsuccess, onerror)
 
@@ -487,6 +489,7 @@ class Messages
                  - type {String} the MIME type of the attachment - allowed types are text/*, image/*, and application/pdf
                  - name {String} the file name of the attachment
                  - content {String} the content of the attachment as a base64-encoded string
+    @option params {Boolean} async enable a background sending mode that is optimized for bulk sending. In async mode, messages/sendTemplate will immediately return a status of "queued" for every recipient. To handle rejections when sending in async mode, set up a webhook for the 'reject' event. Defaults to false for messages with fewer than 100 recipients; messages with more than 100 recipients are always sent asynchronously, regardless of the value of async.
     @param {Function} onsuccess an optional callback to execute when the API call is successfully made
     @param {Function} onerror an optional callback to execute when the API call errors out - defaults to throwing the error as an exception
     ###
@@ -496,6 +499,7 @@ class Messages
             onsuccess = params
             params = {}
 
+        params["async"] ?= false
 
         @master.call('messages/send-template', params, onsuccess, onerror)
 
@@ -550,6 +554,7 @@ class Messages
     @option params {String|null} from_name optionally define the sender alias
     @option params {Array|null} to optionally define the recipients to receive the message - otherwise we'll use the To, Cc, and Bcc headers provided in the document
          - to[] {String} the email address of the recipint
+    @option params {Boolean} async enable a background sending mode that is optimized for bulk sending. In async mode, messages/sendRaw will immediately return a status of "queued" for every recipient. To handle rejections when sending in async mode, set up a webhook for the 'reject' event. Defaults to false for messages with fewer than 100 recipients; messages with more than 100 recipients are always sent asynchronously, regardless of the value of async.
     @param {Function} onsuccess an optional callback to execute when the API call is successfully made
     @param {Function} onerror an optional callback to execute when the API call errors out - defaults to throwing the error as an exception
     ###
@@ -562,6 +567,7 @@ class Messages
         params["from_email"] ?= null
         params["from_name"] ?= null
         params["to"] ?= null
+        params["async"] ?= false
 
         @master.call('messages/send-raw', params, onsuccess, onerror)
 class Urls
