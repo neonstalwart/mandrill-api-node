@@ -6,7 +6,7 @@ OPTS = {
     port:   443,
     prefix: '/api/1.0/',
     method: 'POST',
-    headers: {'Content-Type': 'application/json', 'User-Agent': 'Mandrill-Node/1.0.5'}
+    headers: {'Content-Type': 'application/json', 'User-Agent': 'Mandrill-Node/1.0.6'}
 }
 
 class exports.Mandrill
@@ -24,7 +24,7 @@ class exports.Mandrill
 
     call: (uri, params={}, onresult, onerror) ->
         params.key = @apikey
-        params = JSON.stringify(params)
+        params = new Buffer(JSON.stringify(params), 'utf8')
 
         if @debug then console.log("Mandrill: Opening request to https://#{OPTS.host}#{OPTS.prefix}#{uri}.json")
         OPTS.path = "#{OPTS.prefix}#{uri}.json"

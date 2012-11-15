@@ -11,7 +11,7 @@
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'User-Agent': 'Mandrill-Node/1.0.5'
+      'User-Agent': 'Mandrill-Node/1.0.6'
     }
   };
 
@@ -40,7 +40,7 @@
         params = {};
       }
       params.key = this.apikey;
-      params = JSON.stringify(params);
+      params = new Buffer(JSON.stringify(params), 'utf8');
       if (this.debug) {
         console.log("Mandrill: Opening request to https://" + OPTS.host + OPTS.prefix + uri + ".json");
       }
