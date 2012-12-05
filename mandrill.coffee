@@ -6,7 +6,7 @@ OPTS = {
     port:   443,
     prefix: '/api/1.0/',
     method: 'POST',
-    headers: {'Content-Type': 'application/json', 'User-Agent': 'Mandrill-Node/1.0.6'}
+    headers: {'Content-Type': 'application/json', 'User-Agent': 'Mandrill-Node/1.0.7'}
 }
 
 class exports.Mandrill
@@ -329,6 +329,24 @@ class Tags
 
 
         @master.call('tags/list', params, onsuccess, onerror)
+
+    ###
+    Deletes a tag permanently. Deleting a tag removes the tag from any messages
+that have been sent, and also deletes the tag's stats. There is no way to
+undo this operation, so use it carefully.
+    @param {Object} params the hash of the parameters to pass to the request
+    @option params {String} tag a tag name
+    @param {Function} onsuccess an optional callback to execute when the API call is successfully made
+    @param {Function} onerror an optional callback to execute when the API call errors out - defaults to throwing the error as an exception
+    ###
+    delete: (params={}, onsuccess, onerror) ->
+        if typeof params == 'function'
+            onerror = onsuccess
+            onsuccess = params
+            params = {}
+
+
+        @master.call('tags/delete', params, onsuccess, onerror)
 
     ###
     Return more detailed information about a single tag, including aggregates of recent stats
