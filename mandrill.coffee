@@ -6,7 +6,7 @@ OPTS = {
     port:   443,
     prefix: '/api/1.0/',
     method: 'POST',
-    headers: {'Content-Type': 'application/json', 'User-Agent': 'Mandrill-Node/1.0.7'}
+    headers: {'Content-Type': 'application/json', 'User-Agent': 'Mandrill-Node/1.0.8'}
 }
 
 class exports.Mandrill
@@ -14,8 +14,10 @@ class exports.Mandrill
         @templates = new Templates(this)
         @users = new Users(this)
         @rejects = new Rejects(this)
+        @inbound = new Inbound(this)
         @tags = new Tags(this)
         @messages = new Messages(this)
+        @internal = new Internal(this)
         @urls = new Urls(this)
         @webhooks = new Webhooks(this)
         @senders = new Senders(this)
@@ -86,7 +88,7 @@ class Templates
     ###
     Get the information for an existing template
     @param {Object} params the hash of the parameters to pass to the request
-    @option params {String} name the name of an existing template
+    @option params {String} name the immutable name of an existing template
     @param {Function} onsuccess an optional callback to execute when the API call is successfully made
     @param {Function} onerror an optional callback to execute when the API call errors out - defaults to throwing the error as an exception
     ###
@@ -102,7 +104,7 @@ class Templates
     ###
     Update the code for an existing template
     @param {Object} params the hash of the parameters to pass to the request
-    @option params {String} name the name of an existing template
+    @option params {String} name the immutable name of an existing template
     @option params {String} code the new code for the template
     @option params {Boolean} publish set to false to update the draft version of the template without publishing
     @param {Function} onsuccess an optional callback to execute when the API call is successfully made
@@ -121,7 +123,7 @@ class Templates
     ###
     Publish the content for the template. Any new messages sent using this template will start using the content that was previously in draft.
     @param {Object} params the hash of the parameters to pass to the request
-    @option params {String} name the name of an existing template
+    @option params {String} name the immutable name of an existing template
     @param {Function} onsuccess an optional callback to execute when the API call is successfully made
     @param {Function} onerror an optional callback to execute when the API call errors out - defaults to throwing the error as an exception
     ###
@@ -137,7 +139,7 @@ class Templates
     ###
     Delete a template
     @param {Object} params the hash of the parameters to pass to the request
-    @option params {String} name the name of an existing template
+    @option params {String} name the immutable name of an existing template
     @param {Function} onsuccess an optional callback to execute when the API call is successfully made
     @param {Function} onerror an optional callback to execute when the API call errors out - defaults to throwing the error as an exception
     ###
@@ -184,7 +186,7 @@ class Templates
     ###
     Inject content and optionally merge fields into a template, returning the HTML that results
     @param {Object} params the hash of the parameters to pass to the request
-    @option params {String} template_name the name of a template that exists in the user's account
+    @option params {String} template_name the immutable name of a template that exists in the user's account
     @option params {Array} template_content an array of template content to render.  Each item in the array should be a struct with two keys - name: the name of the content block to set the content for, and content: the actual content to put into the block
          - template_content[] {Object} the injection of a single piece of content into a single editable region
              - name {String} the name of the mc:edit editable region to inject into
@@ -311,6 +313,59 @@ has an affect on your reputation.
 
 
         @master.call('rejects/delete', params, onsuccess, onerror)
+class Inbound
+    constructor: (@master) ->
+
+
+    ###
+    List the domains that have been configured for inbound delivery
+    @param {Object} params the hash of the parameters to pass to the request
+    @param {Function} onsuccess an optional callback to execute when the API call is successfully made
+    @param {Function} onerror an optional callback to execute when the API call errors out - defaults to throwing the error as an exception
+    ###
+    domains: (params={}, onsuccess, onerror) ->
+        if typeof params == 'function'
+            onerror = onsuccess
+            onsuccess = params
+            params = {}
+
+
+        @master.call('inbound/domains', params, onsuccess, onerror)
+
+    ###
+    List the mailbox routes defined for an inbound domain
+    @param {Object} params the hash of the parameters to pass to the request
+    @option params {String} domain the domain to check
+    @param {Function} onsuccess an optional callback to execute when the API call is successfully made
+    @param {Function} onerror an optional callback to execute when the API call errors out - defaults to throwing the error as an exception
+    ###
+    routes: (params={}, onsuccess, onerror) ->
+        if typeof params == 'function'
+            onerror = onsuccess
+            onsuccess = params
+            params = {}
+
+
+        @master.call('inbound/routes', params, onsuccess, onerror)
+
+    ###
+    Take a raw MIME document destined for a domain with inbound domains set up, and send it to the inbound hook exactly as if it had been sent over SMTP
+$sparam string $to[] the email address of the recipient @validate trim
+    @param {Object} params the hash of the parameters to pass to the request
+    @option params {String} raw_message the full MIME document of an email message
+    @option params {Array|null} to optionally define the recipients to receive the message - otherwise we'll use the To, Cc, and Bcc headers provided in the document
+    @param {Function} onsuccess an optional callback to execute when the API call is successfully made
+    @param {Function} onerror an optional callback to execute when the API call errors out - defaults to throwing the error as an exception
+    ###
+    sendRaw: (params={}, onsuccess, onerror) ->
+        if typeof params == 'function'
+            onerror = onsuccess
+            onsuccess = params
+            params = {}
+
+        params["to"] ?= null
+
+        @master.call('inbound/send-raw', params, onsuccess, onerror)
 class Tags
     constructor: (@master) ->
 
@@ -588,6 +643,9 @@ class Messages
         params["async"] ?= false
 
         @master.call('messages/send-raw', params, onsuccess, onerror)
+class Internal
+    constructor: (@master) ->
+
 class Urls
     constructor: (@master) ->
 
