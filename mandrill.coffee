@@ -6,7 +6,7 @@ OPTS = {
     port:   443,
     prefix: '/api/1.0/',
     method: 'POST',
-    headers: {'Content-Type': 'application/json', 'User-Agent': 'Mandrill-Node/1.0.10'}
+    headers: {'Content-Type': 'application/json', 'User-Agent': 'Mandrill-Node/1.0.11'}
 }
 
 class exports.Mandrill
@@ -470,6 +470,7 @@ class Messages
          - track_opens {Boolean} whether or not to turn on open tracking for the message
          - track_clicks {Boolean} whether or not to turn on click tracking for the message
          - auto_text {Boolean} whether or not to automatically generate a text part for messages that are not given text
+         - inline_css {Boolean} whether or not to automatically inline all CSS styles provided in the message HTML - only for HTML documents less than 256KB in size
          - url_strip_qs {Boolean} whether or not to strip the query string from URLs when aggregating tracked URL data
          - preserve_recipients {Boolean} whether or not to expose all recipients in to "To" header for each email
          - bcc_address {String} an optional address to receive an exact copy of each recipient's email
@@ -539,6 +540,7 @@ class Messages
          - track_opens {Boolean} whether or not to turn on open tracking for the message
          - track_clicks {Boolean} whether or not to turn on click tracking for the message
          - auto_text {Boolean} whether or not to automatically generate a text part for messages that are not given text
+         - inline_css {Boolean} whether or not to automatically inline all CSS styles provided in the message HTML - only for HTML documents less than 256KB in size
          - url_strip_qs {Boolean} whether or not to strip the query string from URLs when aggregating tracked URL data
          - preserve_recipients {Boolean} whether or not to expose all recipients in to "To" header for each email
          - bcc_address {String} an optional address to receive an exact copy of each recipient's email
