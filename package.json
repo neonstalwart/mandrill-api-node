@@ -2,7 +2,7 @@
   "author": "Mandrill Devs <community@mandrill.com> (http://mandrill.com)",
   "name": "mandrill-api",
   "description": "The official API client for the Mandrill email as a service product.",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "homepage": "https://bitbucket.org/mailchimp/mandrill-api-node",
   "repository": {
     "type": "git",
