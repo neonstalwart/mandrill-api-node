@@ -6,7 +6,7 @@ OPTS = {
     port:   443,
     prefix: '/api/1.0/',
     method: 'POST',
-    headers: {'Content-Type': 'application/json', 'User-Agent': 'Mandrill-Node/1.0.13'}
+    headers: {'Content-Type': 'application/json', 'User-Agent': 'Mandrill-Node/1.0.14'}
 }
 
 class exports.Mandrill
@@ -351,6 +351,9 @@ class Inbound
     ###
     Take a raw MIME document destined for a domain with inbound domains set up, and send it to the inbound hook exactly as if it had been sent over SMTP
 $sparam string $to[] the email address of the recipient @validate trim
+$sparam string $mail_from the address specified in the MAIL FROM stage of the SMTP conversation @validate email. Optional; required for the SPF check.
+$sparam string $helo the identification provided by the client mta in the MTA state of the SMTP conversation. Optional; required for the SPF check.
+$sparam string $client_address the remote MTA's ip address. Optional; required for the SPF check.
     @param {Object} params the hash of the parameters to pass to the request
     @option params {String} raw_message the full MIME document of an email message
     @option params {Array|null} to optionally define the recipients to receive the message - otherwise we'll use the To, Cc, and Bcc headers provided in the document
