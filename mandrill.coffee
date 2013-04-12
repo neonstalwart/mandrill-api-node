@@ -6,7 +6,7 @@ OPTS = {
     port:   443,
     prefix: '/api/1.0/',
     method: 'POST',
-    headers: {'Content-Type': 'application/json', 'User-Agent': 'Mandrill-Node/1.0.16'}
+    headers: {'Content-Type': 'application/json', 'User-Agent': 'Mandrill-Node/1.0.17'}
 }
 
 class exports.Mandrill
@@ -746,6 +746,7 @@ class Webhooks
     Add a new webhook
     @param {Object} params the hash of the parameters to pass to the request
     @option params {String} url the URL to POST batches of events
+    @option params {String} description an optional description of the webhook
     @option params {Array} events an optional list of events that will be posted to the webhook
          - events[] {String} the individual event to listen for
     @param {Function} onsuccess an optional callback to execute when the API call is successfully made
@@ -757,6 +758,7 @@ class Webhooks
             onsuccess = params
             params = {}
 
+        params["description"] ?= null
         params["events"] ?= []
 
         @master.call('webhooks/add', params, onsuccess, onerror)
@@ -782,6 +784,7 @@ class Webhooks
     @param {Object} params the hash of the parameters to pass to the request
     @option params {Integer} id the unique identifier of a webhook belonging to this account
     @option params {String} url the URL to POST batches of events
+    @option params {String} description an optional description of the webhook
     @option params {Array} events an optional list of events that will be posted to the webhook
          - events[] {String} the individual event to listen for
     @param {Function} onsuccess an optional callback to execute when the API call is successfully made
@@ -793,6 +796,7 @@ class Webhooks
             onsuccess = params
             params = {}
 
+        params["description"] ?= null
         params["events"] ?= []
 
         @master.call('webhooks/update', params, onsuccess, onerror)

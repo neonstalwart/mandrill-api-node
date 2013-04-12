@@ -11,7 +11,7 @@
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'User-Agent': 'Mandrill-Node/1.0.16'
+      'User-Agent': 'Mandrill-Node/1.0.17'
     }
   };
 
@@ -1063,6 +1063,7 @@
         Add a new webhook
         @param {Object} params the hash of the parameters to pass to the request
         @option params {String} url the URL to POST batches of events
+        @option params {String} description an optional description of the webhook
         @option params {Array} events an optional list of events that will be posted to the webhook
              - events[] {String} the individual event to listen for
         @param {Function} onsuccess an optional callback to execute when the API call is successfully made
@@ -1071,7 +1072,7 @@
 
 
     Webhooks.prototype.add = function(params, onsuccess, onerror) {
-      var _ref;
+      var _ref, _ref1;
       if (params == null) {
         params = {};
       }
@@ -1080,7 +1081,10 @@
         onsuccess = params;
         params = {};
       }
-      if ((_ref = params["events"]) == null) {
+      if ((_ref = params["description"]) == null) {
+        params["description"] = null;
+      }
+      if ((_ref1 = params["events"]) == null) {
         params["events"] = [];
       }
       return this.master.call('webhooks/add', params, onsuccess, onerror);
@@ -1112,6 +1116,7 @@
         @param {Object} params the hash of the parameters to pass to the request
         @option params {Integer} id the unique identifier of a webhook belonging to this account
         @option params {String} url the URL to POST batches of events
+        @option params {String} description an optional description of the webhook
         @option params {Array} events an optional list of events that will be posted to the webhook
              - events[] {String} the individual event to listen for
         @param {Function} onsuccess an optional callback to execute when the API call is successfully made
@@ -1120,7 +1125,7 @@
 
 
     Webhooks.prototype.update = function(params, onsuccess, onerror) {
-      var _ref;
+      var _ref, _ref1;
       if (params == null) {
         params = {};
       }
@@ -1129,7 +1134,10 @@
         onsuccess = params;
         params = {};
       }
-      if ((_ref = params["events"]) == null) {
+      if ((_ref = params["description"]) == null) {
+        params["description"] = null;
+      }
+      if ((_ref1 = params["events"]) == null) {
         params["events"] = [];
       }
       return this.master.call('webhooks/update', params, onsuccess, onerror);
