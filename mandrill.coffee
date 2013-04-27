@@ -6,7 +6,7 @@ OPTS = {
     port:   443,
     prefix: '/api/1.0/',
     method: 'POST',
-    headers: {'Content-Type': 'application/json', 'User-Agent': 'Mandrill-Node/1.0.18'}
+    headers: {'Content-Type': 'application/json', 'User-Agent': 'Mandrill-Node/1.0.19'}
 }
 
 class exports.Mandrill
@@ -17,6 +17,7 @@ class exports.Mandrill
         @inbound = new Inbound(this)
         @tags = new Tags(this)
         @messages = new Messages(this)
+        @whitelists = new Whitelists(this)
         @internal = new Internal(this)
         @urls = new Urls(this)
         @webhooks = new Webhooks(this)
@@ -291,6 +292,25 @@ class Users
 class Rejects
     constructor: (@master) ->
 
+
+    ###
+    Adds an email to your email rejection blacklist. Addresses that you
+add manually will never expire and there is no reputation penalty
+for removing them from your blacklist. Attempting to blacklist an
+address that has been whitelisted will have no effect.
+    @param {Object} params the hash of the parameters to pass to the request
+    @option params {String} email an email address to block
+    @param {Function} onsuccess an optional callback to execute when the API call is successfully made
+    @param {Function} onerror an optional callback to execute when the API call errors out - defaults to throwing the error as an exception
+    ###
+    add: (params={}, onsuccess, onerror) ->
+        if typeof params == 'function'
+            onerror = onsuccess
+            onsuccess = params
+            params = {}
+
+
+        @master.call('rejects/add', params, onsuccess, onerror)
 
     ###
     Retrieves your email rejection blacklist. You can provide an email
@@ -689,6 +709,61 @@ class Messages
         params["async"] ?= false
 
         @master.call('messages/send-raw', params, onsuccess, onerror)
+class Whitelists
+    constructor: (@master) ->
+
+
+    ###
+    Adds an email to your email rejection whitelist. If the address is
+currently on your blacklist, that blacklist entry will be removed
+automatically.
+    @param {Object} params the hash of the parameters to pass to the request
+    @option params {String} email an email address to add to the whitelist
+    @param {Function} onsuccess an optional callback to execute when the API call is successfully made
+    @param {Function} onerror an optional callback to execute when the API call errors out - defaults to throwing the error as an exception
+    ###
+    add: (params={}, onsuccess, onerror) ->
+        if typeof params == 'function'
+            onerror = onsuccess
+            onsuccess = params
+            params = {}
+
+
+        @master.call('whitelists/add', params, onsuccess, onerror)
+
+    ###
+    Retrieves your email rejection whitelist. You can provide an email
+address or search prefix to limit the results. Returns up to 1000 results.
+    @param {Object} params the hash of the parameters to pass to the request
+    @option params {String} email an optional email address or prefix to search by
+    @param {Function} onsuccess an optional callback to execute when the API call is successfully made
+    @param {Function} onerror an optional callback to execute when the API call errors out - defaults to throwing the error as an exception
+    ###
+    list: (params={}, onsuccess, onerror) ->
+        if typeof params == 'function'
+            onerror = onsuccess
+            onsuccess = params
+            params = {}
+
+        params["email"] ?= null
+
+        @master.call('whitelists/list', params, onsuccess, onerror)
+
+    ###
+    Removes an email address from the whitelist.
+    @param {Object} params the hash of the parameters to pass to the request
+    @option params {String} email the email address to remove from the whitelist
+    @param {Function} onsuccess an optional callback to execute when the API call is successfully made
+    @param {Function} onerror an optional callback to execute when the API call errors out - defaults to throwing the error as an exception
+    ###
+    delete: (params={}, onsuccess, onerror) ->
+        if typeof params == 'function'
+            onerror = onsuccess
+            onsuccess = params
+            params = {}
+
+
+        @master.call('whitelists/delete', params, onsuccess, onerror)
 class Internal
     constructor: (@master) ->
 
