@@ -6,7 +6,7 @@ OPTS = {
     port:   443,
     prefix: '/api/1.0/',
     method: 'POST',
-    headers: {'Content-Type': 'application/json', 'User-Agent': 'Mandrill-Node/1.0.19'}
+    headers: {'Content-Type': 'application/json', 'User-Agent': 'Mandrill-Node/1.0.20'}
 }
 
 class exports.Mandrill
@@ -112,7 +112,7 @@ class Templates
         @master.call('templates/info', params, onsuccess, onerror)
 
     ###
-    Update the code for an existing template
+    Update the code for an existing template. If null is provided for any fields, the values will remain unchanged.
     @param {Object} params the hash of the parameters to pass to the request
     @option params {String} name the immutable name of an existing template
     @option params {String} from_email the new default sending address
