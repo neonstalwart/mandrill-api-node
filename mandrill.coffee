@@ -6,7 +6,7 @@ OPTS = {
     port:   443,
     prefix: '/api/1.0/',
     method: 'POST',
-    headers: {'Content-Type': 'application/json', 'User-Agent': 'Mandrill-Node/1.0.23'}
+    headers: {'Content-Type': 'application/json', 'User-Agent': 'Mandrill-Node/1.0.24'}
 }
 
 class exports.Mandrill
@@ -665,6 +665,7 @@ class Messages
                  - name {String} the Content ID of the image - use <img src="cid:THIS_VALUE"> to reference the image in your HTML content
                  - content {String} the content of the image as a base64-encoded string
     @option params {Boolean} async enable a background sending mode that is optimized for bulk sending. In async mode, messages/send will immediately return a status of "queued" for every recipient. To handle rejections when sending in async mode, set up a webhook for the 'reject' event. Defaults to false for messages with no more than 10 recipients; messages with more than 10 recipients are always sent asynchronously, regardless of the value of async.
+    @option params {String} ip_pool the name of the dedicated ip pool that should be used to send the message. If you do not have any dedicated IPs, this parameter has no effect. If you specify a pool that does not exist, your default pool will be used instead.
     @param {Function} onsuccess an optional callback to execute when the API call is successfully made
     @param {Function} onerror an optional callback to execute when the API call errors out - defaults to throwing the error as an exception
     ###
@@ -675,6 +676,7 @@ class Messages
             params = {}
 
         params["async"] ?= false
+        params["ip_pool"] ?= null
 
         @master.call('messages/send', params, onsuccess, onerror)
 
@@ -740,6 +742,7 @@ class Messages
                  - name {String} the Content ID of the image - use <img src="cid:THIS_VALUE"> to reference the image in your HTML content
                  - content {String} the content of the image as a base64-encoded string
     @option params {Boolean} async enable a background sending mode that is optimized for bulk sending. In async mode, messages/send will immediately return a status of "queued" for every recipient. To handle rejections when sending in async mode, set up a webhook for the 'reject' event. Defaults to false for messages with no more than 10 recipients; messages with more than 10 recipients are always sent asynchronously, regardless of the value of async.
+    @option params {String} ip_pool the name of the dedicated ip pool that should be used to send the message. If you do not have any dedicated IPs, this parameter has no effect. If you specify a pool that does not exist, your default pool will be used instead.
     @param {Function} onsuccess an optional callback to execute when the API call is successfully made
     @param {Function} onerror an optional callback to execute when the API call errors out - defaults to throwing the error as an exception
     ###
@@ -750,6 +753,7 @@ class Messages
             params = {}
 
         params["async"] ?= false
+        params["ip_pool"] ?= null
 
         @master.call('messages/send-template', params, onsuccess, onerror)
 
@@ -805,6 +809,7 @@ class Messages
     @option params {Array|null} to optionally define the recipients to receive the message - otherwise we'll use the To, Cc, and Bcc headers provided in the document
          - to[] {String} the email address of the recipint
     @option params {Boolean} async enable a background sending mode that is optimized for bulk sending. In async mode, messages/sendRaw will immediately return a status of "queued" for every recipient. To handle rejections when sending in async mode, set up a webhook for the 'reject' event. Defaults to false for messages with no more than 10 recipients; messages with more than 10 recipients are always sent asynchronously, regardless of the value of async.
+    @option params {String} ip_pool the name of the dedicated ip pool that should be used to send the message. If you do not have any dedicated IPs, this parameter has no effect. If you specify a pool that does not exist, your default pool will be used instead.
     @param {Function} onsuccess an optional callback to execute when the API call is successfully made
     @param {Function} onerror an optional callback to execute when the API call errors out - defaults to throwing the error as an exception
     ###
@@ -818,6 +823,7 @@ class Messages
         params["from_name"] ?= null
         params["to"] ?= null
         params["async"] ?= false
+        params["ip_pool"] ?= null
 
         @master.call('messages/send-raw', params, onsuccess, onerror)
 class Whitelists
