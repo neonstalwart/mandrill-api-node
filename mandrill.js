@@ -11,7 +11,7 @@
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'User-Agent': 'Mandrill-Node/1.0.26'
+      'User-Agent': 'Mandrill-Node/1.0.27'
     }
   };
 
@@ -1127,6 +1127,27 @@
         params["limit"] = 100;
       }
       return this.master.call('messages/search', params, onsuccess, onerror);
+    };
+
+    /*
+        Get the information for a single recently sent message
+        @param {Object} params the hash of the parameters to pass to the request
+        @option params {String} id the unique id of the message to get - passed as the "_id" field in webhooks, send calls, or search calls
+        @param {Function} onsuccess an optional callback to execute when the API call is successfully made
+        @param {Function} onerror an optional callback to execute when the API call errors out - defaults to throwing the error as an exception
+    */
+
+
+    Messages.prototype.info = function(params, onsuccess, onerror) {
+      if (params == null) {
+        params = {};
+      }
+      if (typeof params === 'function') {
+        onerror = onsuccess;
+        onsuccess = params;
+        params = {};
+      }
+      return this.master.call('messages/info', params, onsuccess, onerror);
     };
 
     /*
