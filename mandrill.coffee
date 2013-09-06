@@ -6,7 +6,7 @@ OPTS = {
     port:   443,
     prefix: '/api/1.0/',
     method: 'POST',
-    headers: {'Content-Type': 'application/json', 'User-Agent': 'Mandrill-Node/1.0.32'}
+    headers: {'Content-Type': 'application/json', 'User-Agent': 'Mandrill-Node/1.0.33'}
 }
 
 class exports.Mandrill
@@ -19,6 +19,7 @@ class exports.Mandrill
         @tags = new Tags(this)
         @messages = new Messages(this)
         @whitelists = new Whitelists(this)
+        @ips = new Ips(this)
         @internal = new Internal(this)
         @subaccounts = new Subaccounts(this)
         @urls = new Urls(this)
@@ -992,6 +993,195 @@ address or search prefix to limit the results. Returns up to 1000 results.
 
 
         @master.call('whitelists/delete', params, onsuccess, onerror)
+class Ips
+    constructor: (@master) ->
+
+
+    ###
+    Lists your dedicated IPs.
+    @param {Object} params the hash of the parameters to pass to the request
+    @param {Function} onsuccess an optional callback to execute when the API call is successfully made
+    @param {Function} onerror an optional callback to execute when the API call errors out - defaults to throwing the error as an exception
+    ###
+    list: (params={}, onsuccess, onerror) ->
+        if typeof params == 'function'
+            onerror = onsuccess
+            onsuccess = params
+            params = {}
+
+
+        @master.call('ips/list', params, onsuccess, onerror)
+
+    ###
+    Retrieves information about a single dedicated ip.
+    @param {Object} params the hash of the parameters to pass to the request
+    @option params {String} ip a dedicated IP address
+    @param {Function} onsuccess an optional callback to execute when the API call is successfully made
+    @param {Function} onerror an optional callback to execute when the API call errors out - defaults to throwing the error as an exception
+    ###
+    info: (params={}, onsuccess, onerror) ->
+        if typeof params == 'function'
+            onerror = onsuccess
+            onsuccess = params
+            params = {}
+
+
+        @master.call('ips/info', params, onsuccess, onerror)
+
+    ###
+    Requests an additional dedicated IP for your account. Accounts may
+have one outstanding request at any time, and provisioning requests
+are processed within 24 hours.
+    @param {Object} params the hash of the parameters to pass to the request
+    @option params {Boolean} warmup whether to enable warmup mode for the ip
+    @option params {String} pool the id of the pool to add the dedicated ip to, or null to use your account's default pool
+    @param {Function} onsuccess an optional callback to execute when the API call is successfully made
+    @param {Function} onerror an optional callback to execute when the API call errors out - defaults to throwing the error as an exception
+    ###
+    provision: (params={}, onsuccess, onerror) ->
+        if typeof params == 'function'
+            onerror = onsuccess
+            onsuccess = params
+            params = {}
+
+        params["warmup"] ?= false
+        params["pool"] ?= null
+
+        @master.call('ips/provision', params, onsuccess, onerror)
+
+    ###
+    Begins the warmup process for a dedicated IP. During the warmup process,
+Mandrill will gradually increase the percentage of your mail that is sent over
+the warming-up IP, over a period of roughly 30 days. The rest of your mail
+will be sent over shared IPs or other dedicated IPs in the same pool.
+    @param {Object} params the hash of the parameters to pass to the request
+    @option params {String} ip a dedicated ip address
+    @param {Function} onsuccess an optional callback to execute when the API call is successfully made
+    @param {Function} onerror an optional callback to execute when the API call errors out - defaults to throwing the error as an exception
+    ###
+    startWarmup: (params={}, onsuccess, onerror) ->
+        if typeof params == 'function'
+            onerror = onsuccess
+            onsuccess = params
+            params = {}
+
+
+        @master.call('ips/start-warmup', params, onsuccess, onerror)
+
+    ###
+    Cancels the warmup process for a dedicated IP.
+    @param {Object} params the hash of the parameters to pass to the request
+    @option params {String} ip a dedicated ip address
+    @param {Function} onsuccess an optional callback to execute when the API call is successfully made
+    @param {Function} onerror an optional callback to execute when the API call errors out - defaults to throwing the error as an exception
+    ###
+    cancelWarmup: (params={}, onsuccess, onerror) ->
+        if typeof params == 'function'
+            onerror = onsuccess
+            onsuccess = params
+            params = {}
+
+
+        @master.call('ips/cancel-warmup', params, onsuccess, onerror)
+
+    ###
+    Moves a dedicated IP to a different pool.
+    @param {Object} params the hash of the parameters to pass to the request
+    @option params {String} ip a dedicated ip address
+    @option params {String} pool the name of the new pool to add the dedicated ip to
+    @option params {Boolean} create_pool whether to create the pool if it does not exist; if false and the pool does not exist, an Unknown_Pool will be thrown.
+    @param {Function} onsuccess an optional callback to execute when the API call is successfully made
+    @param {Function} onerror an optional callback to execute when the API call errors out - defaults to throwing the error as an exception
+    ###
+    setPool: (params={}, onsuccess, onerror) ->
+        if typeof params == 'function'
+            onerror = onsuccess
+            onsuccess = params
+            params = {}
+
+        params["create_pool"] ?= false
+
+        @master.call('ips/set-pool', params, onsuccess, onerror)
+
+    ###
+    Deletes a dedicated IP. This is permanent and cannot be undone.
+    @param {Object} params the hash of the parameters to pass to the request
+    @option params {String} ip the dedicated ip to remove from your account
+    @param {Function} onsuccess an optional callback to execute when the API call is successfully made
+    @param {Function} onerror an optional callback to execute when the API call errors out - defaults to throwing the error as an exception
+    ###
+    delete: (params={}, onsuccess, onerror) ->
+        if typeof params == 'function'
+            onerror = onsuccess
+            onsuccess = params
+            params = {}
+
+
+        @master.call('ips/delete', params, onsuccess, onerror)
+
+    ###
+    Lists your dedicated IP pools.
+    @param {Object} params the hash of the parameters to pass to the request
+    @param {Function} onsuccess an optional callback to execute when the API call is successfully made
+    @param {Function} onerror an optional callback to execute when the API call errors out - defaults to throwing the error as an exception
+    ###
+    listPools: (params={}, onsuccess, onerror) ->
+        if typeof params == 'function'
+            onerror = onsuccess
+            onsuccess = params
+            params = {}
+
+
+        @master.call('ips/list-pools', params, onsuccess, onerror)
+
+    ###
+    Describes a single dedicated IP pool.
+    @param {Object} params the hash of the parameters to pass to the request
+    @option params {String} pool a pool name
+    @param {Function} onsuccess an optional callback to execute when the API call is successfully made
+    @param {Function} onerror an optional callback to execute when the API call errors out - defaults to throwing the error as an exception
+    ###
+    poolInfo: (params={}, onsuccess, onerror) ->
+        if typeof params == 'function'
+            onerror = onsuccess
+            onsuccess = params
+            params = {}
+
+
+        @master.call('ips/pool-info', params, onsuccess, onerror)
+
+    ###
+    Creates a pool and returns it. If a pool already exists with this
+name, no action will be performed.
+    @param {Object} params the hash of the parameters to pass to the request
+    @option params {String} pool the name of a pool to create
+    @param {Function} onsuccess an optional callback to execute when the API call is successfully made
+    @param {Function} onerror an optional callback to execute when the API call errors out - defaults to throwing the error as an exception
+    ###
+    createPool: (params={}, onsuccess, onerror) ->
+        if typeof params == 'function'
+            onerror = onsuccess
+            onsuccess = params
+            params = {}
+
+
+        @master.call('ips/create-pool', params, onsuccess, onerror)
+
+    ###
+    Deletes a pool. A pool must be empty before you can delete it, and you cannot delete your default pool.
+    @param {Object} params the hash of the parameters to pass to the request
+    @option params {String} pool the name of the pool to delete
+    @param {Function} onsuccess an optional callback to execute when the API call is successfully made
+    @param {Function} onerror an optional callback to execute when the API call errors out - defaults to throwing the error as an exception
+    ###
+    deletePool: (params={}, onsuccess, onerror) ->
+        if typeof params == 'function'
+            onerror = onsuccess
+            onsuccess = params
+            params = {}
+
+
+        @master.call('ips/delete-pool', params, onsuccess, onerror)
 class Internal
     constructor: (@master) ->
 
