@@ -6,7 +6,7 @@ OPTS = {
     port:   443,
     prefix: '/api/1.0/',
     method: 'POST',
-    headers: {'Content-Type': 'application/json', 'User-Agent': 'Mandrill-Node/1.0.33'}
+    headers: {'Content-Type': 'application/json', 'User-Agent': 'Mandrill-Node/1.0.34'}
 }
 
 class exports.Mandrill
@@ -416,6 +416,8 @@ for removing them from your blacklist. Attempting to blacklist an
 address that has been whitelisted will have no effect.
     @param {Object} params the hash of the parameters to pass to the request
     @option params {String} email an email address to block
+    @option params {String} comment an optional comment describing the rejection
+    @option params {String} subaccount an optional unique identifier for the subaccount to limit the blacklist entry
     @param {Function} onsuccess an optional callback to execute when the API call is successfully made
     @param {Function} onerror an optional callback to execute when the API call errors out - defaults to throwing the error as an exception
     ###
@@ -425,6 +427,8 @@ address that has been whitelisted will have no effect.
             onsuccess = params
             params = {}
 
+        params["comment"] ?= null
+        params["subaccount"] ?= null
 
         @master.call('rejects/add', params, onsuccess, onerror)
 
@@ -436,6 +440,7 @@ include_expired to true to include them.
     @param {Object} params the hash of the parameters to pass to the request
     @option params {String} email an optional email address to search by
     @option params {Boolean} include_expired whether to include rejections that have already expired.
+    @option params {String} subaccount an optional unique identifier for the subaccount to limit the blacklist
     @param {Function} onsuccess an optional callback to execute when the API call is successfully made
     @param {Function} onerror an optional callback to execute when the API call errors out - defaults to throwing the error as an exception
     ###
@@ -447,6 +452,7 @@ include_expired to true to include them.
 
         params["email"] ?= null
         params["include_expired"] ?= false
+        params["subaccount"] ?= null
 
         @master.call('rejects/list', params, onsuccess, onerror)
 
@@ -456,6 +462,7 @@ you can remove from your blacklist, but keep in mind that each deletion
 has an affect on your reputation.
     @param {Object} params the hash of the parameters to pass to the request
     @option params {String} email an email address
+    @option params {String} subaccount an optional unique identifier for the subaccount to limit the blacklist deletion
     @param {Function} onsuccess an optional callback to execute when the API call is successfully made
     @param {Function} onerror an optional callback to execute when the API call errors out - defaults to throwing the error as an exception
     ###
@@ -465,6 +472,7 @@ has an affect on your reputation.
             onsuccess = params
             params = {}
 
+        params["subaccount"] ?= null
 
         @master.call('rejects/delete', params, onsuccess, onerror)
 class Inbound
