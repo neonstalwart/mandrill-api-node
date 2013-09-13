@@ -11,7 +11,7 @@
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'User-Agent': 'Mandrill-Node/1.0.34'
+      'User-Agent': 'Mandrill-Node/1.0.35'
     }
   };
 
@@ -1703,6 +1703,51 @@
         params = {};
       }
       return this.master.call('ips/delete-pool', params, onsuccess, onerror);
+    };
+
+    /*
+        Tests whether a domain name is valid for use as the custom reverse
+    DNS for a dedicated IP.
+        @param {Object} params the hash of the parameters to pass to the request
+        @option params {String} ip a dedicated ip address
+        @option params {String} domain the domain name to test
+        @param {Function} onsuccess an optional callback to execute when the API call is successfully made
+        @param {Function} onerror an optional callback to execute when the API call errors out - defaults to throwing the error as an exception
+    */
+
+
+    Ips.prototype.checkCustomDns = function(params, onsuccess, onerror) {
+      if (params == null) {
+        params = {};
+      }
+      if (typeof params === 'function') {
+        onerror = onsuccess;
+        onsuccess = params;
+        params = {};
+      }
+      return this.master.call('ips/check-custom-dns', params, onsuccess, onerror);
+    };
+
+    /*
+        Configures the custom DNS name for a dedicated IP.
+        @param {Object} params the hash of the parameters to pass to the request
+        @option params {String} ip a dedicated ip address
+        @option params {String} domain a domain name to set as the dedicated IP's custom dns name.
+        @param {Function} onsuccess an optional callback to execute when the API call is successfully made
+        @param {Function} onerror an optional callback to execute when the API call errors out - defaults to throwing the error as an exception
+    */
+
+
+    Ips.prototype.setCustomDns = function(params, onsuccess, onerror) {
+      if (params == null) {
+        params = {};
+      }
+      if (typeof params === 'function') {
+        onerror = onsuccess;
+        onsuccess = params;
+        params = {};
+      }
+      return this.master.call('ips/set-custom-dns', params, onsuccess, onerror);
     };
 
     return Ips;
