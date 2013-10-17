@@ -6,7 +6,7 @@ OPTS = {
     port:   443,
     prefix: '/api/1.0/',
     method: 'POST',
-    headers: {'Content-Type': 'application/json', 'User-Agent': 'Mandrill-Node/1.0.36'}
+    headers: {'Content-Type': 'application/json', 'User-Agent': 'Mandrill-Node/1.0.37'}
 }
 
 class exports.Mandrill
@@ -744,6 +744,7 @@ class Messages
              - to[] {Object} a single recipient's information.
                  - email {String} the email address of the recipient
                  - name {String} the optional display name to use for the recipient
+                 - type {String} the header type to use for the recipient, defaults to "to" if not provided
          - headers {Object} optional extra headers to add to the message (most headers are allowed)
          - important {Boolean} whether or not this message is important, and should be delivered ahead of non-important messages
          - track_opens {Boolean} whether or not to turn on open tracking for the message
@@ -826,6 +827,7 @@ class Messages
              - to[] {Object} a single recipient's information.
                  - email {String} the email address of the recipient
                  - name {String} the optional display name to use for the recipient
+                 - type {String} the header type to use for the recipient, defaults to "to" if not provided
          - headers {Object} optional extra headers to add to the message (most headers are allowed)
          - important {Boolean} whether or not this message is important, and should be delivered ahead of non-important messages
          - track_opens {Boolean} whether or not to turn on open tracking for the message
@@ -959,6 +961,22 @@ class Messages
 
 
         @master.call('messages/info', params, onsuccess, onerror)
+
+    ###
+    Get the full content of a recently sent message
+    @param {Object} params the hash of the parameters to pass to the request
+    @option params {String} id the unique id of the message to get - passed as the "_id" field in webhooks, send calls, or search calls
+    @param {Function} onsuccess an optional callback to execute when the API call is successfully made
+    @param {Function} onerror an optional callback to execute when the API call errors out - defaults to throwing the error as an exception
+    ###
+    content: (params={}, onsuccess, onerror) ->
+        if typeof params == 'function'
+            onerror = onsuccess
+            onsuccess = params
+            params = {}
+
+
+        @master.call('messages/content', params, onsuccess, onerror)
 
     ###
     Parse the full MIME document for an email message, returning the content of the message broken into its constituent pieces
